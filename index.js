@@ -46,6 +46,13 @@ async function run() {
       res.send(user)
 
     })
+    app.get('/product/:id' , async(req , res) => {
+      const  id = req.params.id
+     
+      const query = {_id : new ObjectId(id)}
+      const result = await Productcollections.findOne(query)
+      res.send(result)
+    })
     app.post('/productDetails' , async(req , res) => {
         const user = req.body;
         console.log('new' , user);
