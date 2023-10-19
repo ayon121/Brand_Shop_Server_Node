@@ -27,31 +27,37 @@ async function run() {
 
     await client.connect();
     const database = client.db("ProductsDB");
-    const usercollections = database.collection("Products");
+    const Productcollections = database.collection("Products");
 
     app.get('/productDetails' , async(req , res) => {
-        const cursor= usercollections.find()
+        const cursor= Productcollections.find()
         const result = await cursor.toArray();
         res.send(result)
     })
+
+    // const filteredProducts = await collection.find({ category: targetCategory }).toArray();
+
     app.get('/poducts/:id' , async(req , res)=> {
       const id = req.params.id;
-      const query = {_id : new ObjectId(id)}
-      const user = await usercollections.findOne(query);
+      console.log(id);
+      
+      const query = { brands: id };
+      const user = await Productcollections.find(query).toArray();
       res.send(user)
+
     })
     app.post('/productDetails' , async(req , res) => {
         const user = req.body;
         console.log('new' , user);
-        const result = await usercollections.insertOne(user);
+        const result = await Productcollections.insertOne(user);
         res.send(result)
     })
     app.delete('/products/:id' , async(req , res) => {
       const  id = req.params.id
       console.log('plz delete  from database' , id);
-      const query = {_id : new ObjectId(id)}
-      const result = await usercollections.deleteOne(query)
-      res.send(result)
+    //   const query = {_id : new ObjectId(id)}
+    //   const result = await usercollections.deleteOne(query)
+    //   res.send(result)
     })
     app.put('/products/:id' , async(req , res)=> {
       const id = req.params.id;
@@ -65,7 +71,7 @@ async function run() {
           email : User.email
         }
       }
-      const result = await usercollections.updateOne(filter , updateUser , options)
+      const result = await Productcollections.updateOne(filter , updateUser , options)
       res.send(result)
 
     })
