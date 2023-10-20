@@ -28,8 +28,8 @@ async function run() {
     await client.connect();
     const database1 = client.db("ProductsDB");
     const Productcollections = database1.collection("Products");
-    const database2 = client.db("CartDB");
-    const Cartcollections = database2.collection("Cart");
+    const database2 = client.db("MyCartsDB");
+    const Cartcollections = database2.collection("MyCarts");
 
     app.get('/productDetails' , async(req , res) => {
         const cursor= Productcollections.find()
@@ -62,17 +62,28 @@ async function run() {
         res.send(result)
     })
 
-     app.get('/Mycart' , async(req , res) => {
+     app.get('/mycarts' , async(req , res) => {
         const cursor= Cartcollections.find()
         const result = await cursor.toArray();
         res.send(result)
     })
-    app.post('/Mycart' , async(req , res) => {
+    app.post('/mycarts' , async(req , res) => {
         const user = req.body;
-        console.log('new' , user);
+        
         const result = await Cartcollections.insertOne(user);
         res.send(result)
     })
+
+     app.get('/carts/:id' , async(req , res)=> {
+      const id = req.params.id;
+      console.log(id);
+      
+      const query = { userid: id };
+      const user = await Cartcollections.find(query).toArray();
+      res.send(user)
+
+    })
+
     app.delete('/products/:id' , async(req , res) => {
       const  id = req.params.id
       console.log('plz delete  from database' , id);
