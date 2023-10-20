@@ -26,8 +26,10 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
 
     await client.connect();
-    const database = client.db("ProductsDB");
-    const Productcollections = database.collection("Products");
+    const database1 = client.db("ProductsDB");
+    const Productcollections = database1.collection("Products");
+    const database2 = client.db("CartDB");
+    const Cartcollections = database2.collection("Cart");
 
     app.get('/productDetails' , async(req , res) => {
         const cursor= Productcollections.find()
@@ -57,6 +59,18 @@ async function run() {
         const user = req.body;
         console.log('new' , user);
         const result = await Productcollections.insertOne(user);
+        res.send(result)
+    })
+
+     app.get('/Mycart' , async(req , res) => {
+        const cursor= Cartcollections.find()
+        const result = await cursor.toArray();
+        res.send(result)
+    })
+    app.post('/Mycart' , async(req , res) => {
+        const user = req.body;
+        console.log('new' , user);
+        const result = await Cartcollections.insertOne(user);
         res.send(result)
     })
     app.delete('/products/:id' , async(req , res) => {
