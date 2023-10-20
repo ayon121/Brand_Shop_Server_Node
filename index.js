@@ -72,13 +72,20 @@ async function run() {
       console.log(id ,User);
       const filter = {_id : new ObjectId(id)}
       const options = {upsert : true}
-      const  updateUser = { 
+      const  updateProduct = { 
         $set : {
           name: User.name,
-          email : User.email
+          price: User.price,
+          image: User.image,
+          ratings: User.ratings,
+          category: User.category,
+          description: User.description,
+          brands: User.brands,
+          
         }
       }
-      const result = await Productcollections.updateOne(filter , updateUser , options)
+     
+      const result = await Productcollections.updateOne(filter , updateProduct, options)
       res.send(result)
 
     })
